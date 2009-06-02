@@ -1,0 +1,2 @@
+/* Define if you have gloox/message.h */
+#undef HAVE_GLOOX_MESSAGE_H
