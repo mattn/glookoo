@@ -74,7 +74,7 @@ public:
 	}
 
 	virtual ~Glookoo() {
-		delete client_;
+		if (client_) delete client_;
 	}
 
 	virtual void onConnect() {
@@ -99,8 +99,10 @@ public:
 
 	virtual void onDisconnect(gloox::ConnectionError reason) {
 		displayMessage("=== disconnected ===");
-		delete session_;
-		session_ = NULL;
+		if (session_) {
+			delete session_;
+			session_ = NULL;
+		}
 	}
 
 	virtual bool onTLSConnect(const gloox::CertInfo &info) {
@@ -112,6 +114,10 @@ public:
 		client_->registerConnectionListener(this);
 		client_->setServer(server_);
 		client_->connect();
+	}
+
+	void stop() {
+		client_->disconnect();
 	}
 
 	void sendMessage(const char* message) {
@@ -144,7 +150,7 @@ static Glookoo* glookoo = NULL;
 
 static void* input_func(void* arg) {
 	pthread_detach(pthread_self());
-	while (true) {
+	while (glookoo) {
 		rl_callback_read_char();
 	}
 	return 0;
@@ -156,7 +162,15 @@ static void* gloox_func(void* arg) {
 
 static void input_handler(void) {
 	char* message = rl_copy_text(0, rl_end);
-	if (glookoo) glookoo->sendMessage(message);
+	if (glookoo && strlen(message)) {
+		rl_beg_of_line(0, 0);
+		rl_redisplay();
+		if (*message != '/')
+			glookoo->sendMessage(message);
+		else {
+			if (!stricmp(message + 1, "quit")) glookoo->stop();
+		}
+	}
 	free(message);
 }
 
@@ -257,11 +271,16 @@ int main(int argc, char* argv[]) {
 	
 	rl_callback_handler_install("#> ", (void(*)(char*))input_handler);
 
-	glookoo = new Glookoo(server, jid, passwd, user);
+	Glookoo* tmp = glookoo = new Glookoo(server, jid, passwd, user);
+
 	pthread_create(&pt_input, NULL, &input_func, glookoo);
-	pthread_create(&pt_gloox, NULL, &gloox_func, glookoo);
-	pthread_join(pt_gloox, NULL);
+
+	glookoo->run();
+	glookoo = NULL;
+	delete tmp;
+
 	pthread_join(pt_input, NULL);
+
 	rl_deprep_terminal();
 	return 0;
 }
