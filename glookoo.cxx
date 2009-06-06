@@ -16,6 +16,7 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#define strcasecmp(x, y) stricmp(x, y)
 #endif
 
 static char* str_to_utf8_alloc(const char* str) {
@@ -74,7 +75,7 @@ public:
 	}
 
 	virtual ~Glookoo() {
-		if (client_) delete client_;
+		//if (client_) delete client_;
 	}
 
 	virtual void onConnect() {
@@ -168,7 +169,7 @@ static void input_handler(void) {
 		if (*message != '/')
 			glookoo->sendMessage(message);
 		else {
-			if (!stricmp(message + 1, "quit")) glookoo->stop();
+			if (!strcasecmp(message + 1, "quit")) glookoo->stop();
 		}
 	}
 	free(message);

@@ -2,7 +2,7 @@ all : glookoo
 	@echo done
 
 glookoo : glookoo.cxx
-	g++ glookoo.cxx -o glookoo -lgloox -lreadline -lpthread
+	g++ -g glookoo.cxx -o glookoo -lgloox -lreadline -lpthread
 
 clean :
 	@rm *.log
