@@ -47,4 +47,4 @@ USAGE:
 
 or 
 
-	# glookoo -s my-server -j my@example.comment -p mypassword -u your@example.com
+	# glookoo -s my-server -j my@example.com -p mypassword -u your@example.com
