@@ -266,7 +266,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (!jid || !passwd) {
-		fprintf (stderr, "Usage: glookoo [-s server] [-j jid] [-p passwd] [-u user]\n");
+		fprintf (stderr, "Usage: glookoo [-c config-file] [-s server] [-j jid] [-p passwd] [-u user]\n");
 		exit (1);
 	}
 	
