@@ -2,7 +2,7 @@ all : glookoo
 	@echo done
 
 glookoo : glookoo.cxx
-	g++ -DHAVE_GLOOX_MESSAGE_H -g glookoo.cxx -o glookoo -lgloox -lreadline -lpthread -lws2_32 -lsecur32 -lcrypt32
+	g++ -DHAVE_CONFIG_H -g glookoo.cxx -o glookoo -lgloox -lreadline -lpthread
 
 clean :
 	@rm *.log
