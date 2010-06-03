@@ -43,7 +43,7 @@ public:
 	virtual void handleMessage(const gloox::Message& msg, gloox::MessageSession *session) {}
 }; ], ,
 	  AC_MSG_RESULT(yes)
-		AC_DEFINE(HAVE_GLOOX_MESSAGE_HEADER),
+		AC_DEFINE(HAVE_GLOOX_MESSAGE_H),
 	  AC_MSG_RESULT(no))
 
 #AC_CONFIG_FILES([Makefile])
